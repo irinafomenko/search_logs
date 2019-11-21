@@ -50,7 +50,6 @@ void read_log_file(string file)
                 /*---------------------------------------------*/
                 //время
                 p1 = log_str.find(' ');
-                flag_child = true;
                 create_xml.add_child(flag_child, "Time", log_str.substr(p1 + 1, 8));
                 /*---------------------------------------------*/
                 while(p2 < 0)
@@ -74,7 +73,7 @@ void read_log_file(string file)
                     }
                     //cout << log_str.substr(0, p3) << endl;
                     /*---------------------------------------------*/
-                    flag_child = true;
+                    //flag_child = true;
                     create_xml.add_child(flag_child, log_str.substr(0, p3).c_str(), value_log);
                     /*---------------------------------------------*/
                 }
