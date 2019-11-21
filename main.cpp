@@ -15,9 +15,8 @@ XML create_xml;
 void read_log_file(string file)
 {
     bool flag_child;//флаг для создания дерева
-    string log_str, sub_str = "SIP/2.0";
+    string log_str, sub_str;// = "SIP/2.0";
     ifstream log_file(file,ios::in);
-
 
     if(log_file.is_open())
     {
