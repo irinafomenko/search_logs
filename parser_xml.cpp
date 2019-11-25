@@ -13,10 +13,24 @@ bool flag_not_found = false;
 //xml file
 xml_document<> doc;
 std::ofstream logs_file;
+string start_time;//начало времени
+string end_time;
+
+void search_time(xml_node<> * node)
+{
+    if(node->value() < start_time) {start_time = node->value();}
+    if(node->value() > end_time) {end_time = node->value();}
+}
 
 void print_node(xml_node<> * node)
 {
     logs_file << node->name() << ": " << node->value() << endl;
+    string time = "Time";
+    if(node->name() == time)
+    {
+        if(start_time.length() == 0) {start_time = end_time = node->value();}
+        search_time(node);
+    }
     cout << node->name() << ": " << node->value() << endl;
     for (xml_attribute<> * att = node->first_attribute(); att; att = att->next_attribute())
     {
@@ -35,8 +49,18 @@ void print_result(xml_node<> * node)
     string sip = "SIP";
     if(parent->name() == sip)
     {
-        logs_file << endl << "Name tag: " << node->name() << endl;
-        cout << "Name tag: " << node->name() << endl;
+        string type = "SIP.2.0";
+        if(parent->name() == type)
+        {
+            xml_attribute<> * att =  parent->first_attribute();
+            logs_file << endl << "Name tag: " << node->name() << " " << att->value() << endl;
+            cout << "Name tag: " << node->name() << " " << att->value() << endl;
+        }
+        else
+        {
+            logs_file << endl << "Name tag: " << node->name() << endl;
+            cout << "Name tag: " << node->name() << endl;
+        }
         for (xml_node<> * child_node = node->first_node(); child_node; child_node = child_node->next_sibling())
         {
             print_node(child_node);
@@ -44,12 +68,22 @@ void print_result(xml_node<> * node)
     }
     else
     {
-        logs_file << endl << "Parent node: " << parent->name() << endl;
-        cout << "Parent node: " << parent->name() << endl;
+        string type = "SIP.2.0";
+        if(parent->name() == type)
+        {
+            xml_attribute<> * att =  parent->first_attribute();
+            logs_file << endl << "Parent node: " << parent->name() << " " << att->value() << endl;
+            cout << "Parent node: " << parent->name() << " " << att->value() << endl;
+        }
+        else
+        {
+            logs_file << endl << "Parent node: " << parent->name() << endl;
+            cout << "Parent node: " << parent->name() << endl;
+        }
         xml_node<> * child_node = parent->first_node();
         for (xml_node<> * child_node = parent->first_node(); child_node; child_node = child_node->next_sibling())
         {
-            print_node(child_node);
+             print_node(child_node);
         }
     }
     flag_not_found = true;
@@ -119,6 +153,8 @@ int pars_xml(std::string file)
     {
         parsing_xml(file);
         logs_file.close();
+        cout << "start_time: " << start_time << endl;
+        cout << "end_time: " << end_time << endl;
     }
     else
     {
