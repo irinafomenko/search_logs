@@ -31,6 +31,7 @@ void XML::add_child(bool flag_child, std::string name_str, std::string value_str
     } else
     {
         child = doc.allocate_node(rapidxml::node_element, name, value);
+        if(name_str == "SIP.2.0") {child->append_attribute(doc.allocate_attribute("type", value));}
         root->append_node(child);
     }
 }
