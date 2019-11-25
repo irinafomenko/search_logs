@@ -15,7 +15,8 @@ XML create_xml;
 void read_log_file(string file)
 {
     bool flag_child;//флаг для создания дерева
-    string log_str, sub_str;// = "SIP/2.0";
+    string log_str, sub_str;
+    string value_sub_str = "";// = "SIP/2.0";
     ifstream log_file(file,ios::in);
 
     if(log_file.is_open())
@@ -32,7 +33,21 @@ void read_log_file(string file)
                 sub_str = enum_to_str(sub_start);
                 p1 = log_str.find("<" + sub_str);
                 p4 = log_str.find("<^" + sub_str);
-                if(sub_start == SIP) {sub_str = "SIP.2.0";}
+                if(sub_start == SIP)
+                {
+                    sub_str = "SIP.2.0";
+                    if(p4 >= 0)
+                    {
+                        value_sub_str = log_str.substr(p4 + sub_str.length() + 3);
+                        value_sub_str[value_sub_str.length() - 1] = 0;
+                    } //без пробела
+                    else if(p1 >= 0)
+                    {
+                        value_sub_str = log_str.substr(p1 + sub_str.length() + 2);
+                        value_sub_str[value_sub_str.length() - 1] = 0;
+                    }
+                    //cout << value_sub_str << endl;
+                }
                 if(p1 >= 0 || p4 >= 0) {break;}
                 sub_start++;
             }
@@ -41,7 +56,7 @@ void read_log_file(string file)
             {
                 /*---------------------------------------------*/
                 flag_child = false;
-                create_xml.add_child(flag_child, sub_str.c_str());
+                create_xml.add_child(flag_child, sub_str, value_sub_str);
                 /*---------------------------------------------*/
                 //дата
                 p1 = log_str.find('@');
