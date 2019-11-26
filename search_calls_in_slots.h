@@ -1,0 +1,8 @@
+//
+// Created by ifomenko on 26.11.2019.
+//
+
+#ifndef PROJECT_LOGS_SEARCH_CALLS_IN_SLOTS_H
+#define PROJECT_LOGS_SEARCH_CALLS_IN_SLOTS_H
+
+#endif //PROJECT_LOGS_SEARCH_CALLS_IN_SLOTS_H
