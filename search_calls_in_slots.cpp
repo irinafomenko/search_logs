@@ -31,8 +31,8 @@ void write_file(string slot, string file)
                 }
                 result_file << endl;
                 prev_slot = slot;
+                cout << "SessionSlot-" << prev_slot << endl;
             }
-
         }
         slot_file.close();
     }
@@ -89,7 +89,7 @@ int search_calls(string time)
         string file;
         if(i == 0) {file = "C:/Users/ifomenko/Desktop/prjct_logs/opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionManager.log";}
         else {file = "C:/Users/ifomenko/Desktop/prjct_logs/opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionManager.log." + to_string(i);}
-        cout << file << endl;
+        //cout << file << endl;
         search_slot(file);
     }
     result_file.close();
