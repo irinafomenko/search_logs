@@ -31,13 +31,13 @@ void print_node(xml_node<> * node)
         if(start_time.length() == 0) {start_time = end_time = node->value();}
         search_time(node);
     }
-    cout << node->name() << ": " << node->value() << endl;
+    //cout << node->name() << ": " << node->value() << endl;
     for (xml_attribute<> * att = node->first_attribute(); att; att = att->next_attribute())
     {
         logs_file << "Name attribute: " << att->name() << endl;
         logs_file << "Value attribute: " << att->value() << endl;
-        cout << "Name attribute: " << att->name() << endl;
-        cout << "Value attribute: " << att->value() << endl;
+        //cout << "Name attribute: " << att->name() << endl;
+        //cout << "Value attribute: " << att->value() << endl;
     }
 }
 
@@ -80,7 +80,6 @@ void print_result(xml_node<> * node)
             logs_file << endl << "Parent node: " << parent->name() << endl;
             cout << "Parent node: " << parent->name() << endl;
         }
-        xml_node<> * child_node = parent->first_node();
         for (xml_node<> * child_node = parent->first_node(); child_node; child_node = child_node->next_sibling())
         {
              print_node(child_node);
@@ -145,20 +144,21 @@ void parsing_xml(std::string file)
     }
 }
 
-int pars_xml(std::string file)
+string pars_xml(std::string file)
 {
-    //download_xml();
+    string result_time;
     logs_file.open("results_search_logs.txt", ios::out);
     if(logs_file.is_open())
     {
         parsing_xml(file);
         logs_file.close();
-        cout << "start_time: " << start_time << endl;
+        cout << endl << "start_time: " << start_time << endl;
         cout << "end_time: " << end_time << endl;
+        result_time = start_time + " " + end_time;
     }
     else
     {
         cout << "Output file doesn't open!" << endl;
     }
-    return 0;
+    return result_time;
 }
