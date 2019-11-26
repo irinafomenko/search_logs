@@ -6,6 +6,7 @@
 #include "enum_tags.h"
 #include "class_XML.h"
 #include "parser_xml.h"
+#include "search_calls_in_slots.h"
 
 using namespace rapidxml;
 using namespace std;
@@ -106,6 +107,7 @@ void read_log_file(string file)
 int main()
 {
     string new_xml_file = "SessionManager.xml";
+    string time;
     /*---------------------------------------------*/
     create_xml.open_file(new_xml_file);
     create_xml.add_root();
@@ -121,7 +123,9 @@ int main()
     /*---------------------------------------------*/
     create_xml.close_file();
     /*---------------------------------------------*/
-    pars_xml(new_xml_file);
+    time = pars_xml(new_xml_file);
+    /*---------------------------------------------*/
+    search_calls(time);
     /*---------------------------------------------*/
     return 0;
 }
