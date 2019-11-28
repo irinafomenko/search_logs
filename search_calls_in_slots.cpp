@@ -42,55 +42,29 @@ void write_file(string slot, string file)
     }
 }
 
-void search_slot(string file)
-{
-    string log_str, sub_str;
-    string value_sub_str = "";// = "SIP/2.0";
-    ifstream log_file(file,ios::in);
-
-    if(log_file.is_open())
-    {
-        //string line = "";
-        while(!log_file.eof())
-        {
-            getline(log_file, log_str);
-            int p1;//позиции вхождений подстрок
-            string sub_str = "[SessionSlot";
-            p1 = log_str.find(sub_str);
-            if(p1 >= 0)
-            {
-                string number_slot = log_str.substr(p1 + sub_str.length() + 1,3);
-                //cout << number_slot << endl;
-                for(int i=0; i<2; i++)
-                {
-                    string file_slot;
-                    if(i == 0) {file_slot = "C:/Users/ifomenko/Desktop/prjct_logs/opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionSlot-" + number_slot + ".log";}
-                    else {file_slot = "C:/Users/ifomenko/Desktop/prjct_logs/opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionSlot-" + number_slot + ".log.1";}
-                    write_file(number_slot, file_slot);
-                }
-            }
-        }
-        log_file.close();
-    }
-    else
-    {
-        cout << "Log_file doesn't open!" << endl;
-    }
-}
-
-int search_calls(string time)
+int search_calls(string time, string number_sid)
 {
     int pos_time = time.find(' ');
     start_t = time.substr(0,pos_time);
     end_t = time.substr(pos_time + 1);
-    string new_xml_file = "SessionManager.xml";
-    for(int i=0; i<5; i++)
+    string file;
+    for(int i=0; i<2; i++)
     {
-        string file;
-        if(i == 0) {file = "C:/Users/ifomenko/Desktop/prjct_logs/opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionManager.log";}
-        else {file = "C:/Users/ifomenko/Desktop/prjct_logs/opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionManager.log." + to_string(i);}
+        if(i == 0)
+        {
+            if(number_sid.length() == 1) {file = "C:/Users/ifomenko/Desktop/prjct_logs/opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionSlot-00" + number_sid + ".log";}
+            else if(number_sid.length() == 2){file = "C:/Users/ifomenko/Desktop/prjct_logs/opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionSlot-0" + number_sid + ".log";}
+            else {file = "C:/Users/ifomenko/Desktop/prjct_logs/opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionSlot-" + number_sid + ".log";}
+        }
+        else
+        {
+            if(number_sid.length() == 1) {file = "C:/Users/ifomenko/Desktop/prjct_logs/opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionSlot-00" + number_sid + ".log.1";}
+            else if(number_sid.length() == 2){file = "C:/Users/ifomenko/Desktop/prjct_logs/opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionSlot-0" + number_sid + ".log.1";}
+            else {file = "C:/Users/ifomenko/Desktop/prjct_logs/opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionSlot-" + number_sid + ".log.1";}
+        }
         //cout << file << endl;
-        search_slot(file);
+        //search_slot(file);
+        write_file(number_sid, file);
     }
     result_file.close();
     return 0;
