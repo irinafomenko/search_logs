@@ -16,6 +16,8 @@ extern ofstream result_logs_file;
 extern string number_sid;//номер слота
 string call_id = "";
 bool id_invite = false;
+int pos_name;
+int pos_value;
 
 void search_time(string line, int pos_time)
 {
@@ -31,6 +33,7 @@ void search_call_id(string line)
 {
     int pos_call_id = line.find("Call-ID: ");
     if(pos_call_id >= 0) {call_id = line.substr(pos_call_id + 9, line.length() - pos_call_id - 10);}
+    //cout << call_id << endl;
 }
 
 void write_result(string search_tags, string line)
@@ -45,7 +48,7 @@ void write_result(string search_tags, string line)
     //INVITE
     int pos_invite = search_tags.find("INVITE");
     if(pos_invite >= 0) {id_invite = true;}
-    if(id_invite == true) {search_call_id(search_tags);}
+    if(id_invite == true && call_id.empty()) {search_call_id(search_tags);}
 
     int pos_sign = line.find(">|");
     while(pos_sign < 0)
@@ -53,7 +56,7 @@ void write_result(string search_tags, string line)
         getline(theFile, line);
         //search_time(line);
         result_logs_file << line << endl;
-        if(id_invite == true) {search_call_id(line);}
+        if(id_invite == true && call_id.empty()) {search_call_id(line);}
         pos_sign = line.find(">|");
     }
     /*
@@ -77,6 +80,7 @@ void search_tag(string name_tag, string value_tag)
         sub_str = enum_to_str(sub_start);
         p1 = log_str.find("<" + sub_str);
         p4 = log_str.find("<^" + sub_str);
+
         if(sub_start == SIP)
         {
             sub_str = "SIP.2.0";
@@ -106,8 +110,9 @@ void search_tag(string name_tag, string value_tag)
         getline(theFile, log_str);
         search_tags += log_str;
         //cout << search_tags << endl;
-        int pos_name = log_str.find(name_tag);
-        int pos_value = log_str.find(value_tag);
+        pos_name = log_str.find(name_tag);
+        pos_value = log_str.find(value_tag);
+
         while(pos_name < 0 && pos_value < 0)
         {
             //search_tags += add_search_tags();
@@ -119,6 +124,7 @@ void search_tag(string name_tag, string value_tag)
         }
         //cout << log_str.substr(0, pos_name + name_tag.length()) << endl;
         if(pos_name >= 0 && pos_value >= 0) {write_result(search_tags, log_str);}
+
     }
 
     //cout << search_tags << endl;
