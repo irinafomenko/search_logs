@@ -5,23 +5,21 @@
 
 using namespace std;
 
-bool flag_not_found_2 = false;
+bool flag_not_found = false;
 
 //ofstream result_logs_file;
 string time_start;//начало времени
-string time_end;
-ifstream theFile;
-string value_sub_str = "";// поиск значений после SIP/2.0
-extern ofstream result_logs_file;
-extern string number_sid;//номер слота
-string call_id = "";
-bool id_invite = false;
-int pos_name;
-int pos_value;
+string time_end;//конец времени
+ifstream theFile;//файл логов
+extern ofstream result_logs_file;//результирующий файл из main.cpp
+extern string number_slot;//номер слота из main.cpp
+string call_id = "";//call-id инвайта
+bool id_invite = false;//флаг для поиска id инвайта
+
 
 void search_time(string line, int pos_time)
 {
-    //int pos_time = line.find("Time: ");
+    //поиск времени, начиная с 13 поизиции строки. 8 это количество символов времени
     string time = line.substr(pos_time + 12, 8);
     //cout << time << endl;
     if(time_start.length() == 0) {time_start = time_end = time;}
@@ -31,7 +29,7 @@ void search_time(string line, int pos_time)
 
 void search_call_id(string line)
 {
-    int pos_call_id = line.find("Call-ID: ");
+    int pos_call_id = line.find("Call-ID: ");//поиск строки с call-id
     if(pos_call_id >= 0) {call_id = line.substr(pos_call_id + 9, line.length() - pos_call_id - 10);}
     //cout << call_id << endl;
 }
@@ -41,62 +39,46 @@ void write_result(string search_tags, string line)
     //cout << endl;
     //cout << search_tags << endl;
     //result_logs_file << value_sub_str << endl;
-    //время
-    result_logs_file << search_tags << endl;
+    //поиск времени
+    result_logs_file << search_tags << endl;//запись тега в файл до искомой строки
     int pos_time = search_tags.find("@");
-    if(pos_time >= 0) {search_time(search_tags, pos_time);}
+    if(pos_time >= 0) {search_time(search_tags, pos_time);}//поиск вермени звонка (начало и конец)
     //INVITE
     int pos_invite = search_tags.find("INVITE");
-    if(pos_invite >= 0) {id_invite = true;}
-    if(id_invite == true && call_id.empty()) {search_call_id(search_tags);}
+    if(pos_invite >= 0) {id_invite = true;}//если это INVITE, то ищем call-id звонка
+    if(id_invite == true && call_id.empty()) {search_call_id(search_tags);}//поиска call-id до найденной строки
 
-    int pos_sign = line.find(">|");
-    while(pos_sign < 0)
+    int pos_sign = line.find(">|");//поиск конца тега
+    while(pos_sign < 0)// если не конец тега, то пишем все в файл
     {
         getline(theFile, line);
         //search_time(line);
         result_logs_file << line << endl;
-        if(id_invite == true && call_id.empty()) {search_call_id(line);}
+        if(id_invite == true && call_id.empty()) {search_call_id(line);}//поиск call-id после искомой строки
         pos_sign = line.find(">|");
     }
-    /*
 
-    */
-    //cout << "123" << endl;
-    flag_not_found_2 = true;
+    flag_not_found = true;
 }
 
 void search_tag(string name_tag, string value_tag)
 {
+    int pos_name;//позиция в строке имени тега
+    int pos_value;//позиция в строке значения тега
     string log_str, search_tags = "", sub_str;
-    id_invite = false;
+    id_invite = false;//call_id invite не найден
 
     getline(theFile, log_str);
-    int p1, p4;//позиции вхождений подстрок
+    int p1, p2;//позиции вхождений подстрок для поиска
     int sub_start = INVITE;
     int sub_end = SIP;
     while(sub_start <= sub_end) //поиск тега по возможным значениям
     {
         sub_str = enum_to_str(sub_start);
         p1 = log_str.find("<" + sub_str);
-        p4 = log_str.find("<^" + sub_str);
+        p2 = log_str.find("<^" + sub_str);
 
-        if(sub_start == SIP)
-        {
-            sub_str = "SIP.2.0";
-            if(p4 >= 0)
-            {
-                value_sub_str = log_str.substr(p4 + sub_str.length() + 3);
-                value_sub_str[value_sub_str.length() - 1] = 0;
-            } //без пробела
-            else if(p1 >= 0)
-            {
-                value_sub_str = log_str.substr(p1 + sub_str.length() + 2);
-                value_sub_str[value_sub_str.length() - 1] = 0;
-            }
-            //cout << value_sub_str << endl;
-        }
-        if(p1 >= 0 || p4 >= 0)
+        if(p1 >= 0 || p2 >= 0)//если одна из подстрок найдена, то записываем строку в переменную
         {
             search_tags += log_str;
             //cout << search_tags << endl;
@@ -105,7 +87,7 @@ void search_tag(string name_tag, string value_tag)
         sub_start++;
     }
 
-    if(p1 >= 0 || p4 >= 0)
+    if(p1 >= 0 || p2 >= 0)//если одна из подстрок найдена (если в предыдущем цикле ничего не найдено, ничего не происходило)
     {
         getline(theFile, log_str);
         search_tags += log_str;
@@ -113,7 +95,7 @@ void search_tag(string name_tag, string value_tag)
         pos_name = log_str.find(name_tag);
         pos_value = log_str.find(value_tag);
 
-        while(pos_name < 0 && pos_value < 0)
+        while(pos_name < 0 && pos_value < 0)//запись всех строк после открытого тега <
         {
             //search_tags += add_search_tags();
             //getline(theFile, log_str);
@@ -123,7 +105,7 @@ void search_tag(string name_tag, string value_tag)
             pos_value = log_str.find(value_tag);
         }
         //cout << log_str.substr(0, pos_name + name_tag.length()) << endl;
-        if(pos_name >= 0 && pos_value >= 0) {write_result(search_tags, log_str);}
+        if(pos_name >= 0 && pos_value >= 0) {write_result(search_tags, log_str);}//при совпадении имени тега и его значении записываем в файл
 
     }
 
@@ -144,15 +126,15 @@ void search_slot(string file)
             int pos_sid = line.find("sipcid:");
             int id = line.find(call_id);
             int pos_cid;
-            if(id >= 0 && pos_sid >= 0)
+            if(id >= 0 && pos_sid >= 0)//если подстрока sipcid: и call_id инвайта найдено в одной строке, то ищем начало и конец строки с номером слота
             {
-                pos_sid = line.find("sid:");
-                pos_cid = line.find("cid:");
-                if(pos_sid >= 0)
+                pos_sid = line.find("sid:");//начало подстроки с номером слота
+                pos_cid = line.find("cid:");//конец подстроки с номером слота
+                if(pos_sid >= 0)//если начало найдено
                 {
-                    number_sid = line.substr(pos_sid, pos_cid - pos_sid - 1);//без пробела
+                    number_slot = line.substr(pos_sid, pos_cid - pos_sid - 1);//записываем строку, -1 без пробела
                     //cout << number_sid << endl;
-                    result_logs_file << line << endl;
+                    result_logs_file << line << endl;//запись строки полностью в файл
                     break;
                 }
             }
@@ -176,25 +158,23 @@ void parsing_txt(string file, string name_tag, string value_tag)
         {
             search_tag(name_tag, value_tag);
         }
-        if(flag_not_found_2 == false) {cout << endl << "Not found!" << endl;}
+        if(flag_not_found == false) {cout << endl << "Not found!" << endl;}
         theFile.close();
     }
     else
     {
         cout << "Log file doesn't open!" << endl;
     }
-    if(call_id != "") {search_slot(file);}
+    if(call_id != "") {search_slot(file);}//если call-id найдено, ищем номер слота
     //cout << call_id << endl;
 }
 
 string pars_txt(string file, string name_tag, string value_tag)
 {
     string result_time = "";
-    //result_logs_file.open("results_search_logs.txt", ios::out);
     if(result_logs_file.is_open())
     {
         parsing_txt(file, name_tag, value_tag);
-        //result_logs_file.close();
         //cout << endl << "start_time: " << time_start << endl;
         //cout << "end_time: " << time_end << endl;
         result_time = time_start + " " + time_end;
