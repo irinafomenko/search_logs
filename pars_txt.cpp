@@ -30,7 +30,7 @@ void search_time(string line, int pos_time)
 void search_call_id(string line)
 {
     int pos_call_id = line.find("Call-ID: ");//поиск строки с call-id
-    if(pos_call_id >= 0) {call_id = line.substr(pos_call_id + 9, line.length() - pos_call_id - 10);}
+    if(pos_call_id >= 0) {call_id = line.substr(pos_call_id + 9, line.length() - pos_call_id - 10);}//line.length() - pos_call_id - 10 длина call-ID
     //cout << call_id << endl;
 }
 
