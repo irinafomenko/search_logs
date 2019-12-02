@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cstring>
 #include "pars_txt.h"
 #include "search_calls.h"
 
@@ -7,10 +8,19 @@ using namespace std;
 
 ofstream result_logs_file("SM_SIP_result.txt", ios::out);
 string number_slot;//номер слота
+string path;
 
-int main()
+int main(int argc, char *argv[])
 {
-    string new_xml_file = "SessionManager.xml";
+    if(argc>1)
+    {
+        if(!strcmp(argv[1],".")) {path = "";}//текущая директория
+        else {path = argv[1];}//введенная директория
+    }
+    else
+    {
+        path = "C:/Users/ifomenko/Desktop/prjct_logs/";//если ничего не вводили
+    }
     string time;
     string name_tag, value_tag;
     cout << "Enter name tag: ";
@@ -21,8 +31,8 @@ int main()
     for(int i=0; i<5; i++)
     {
         string file;
-        if(i == 0) {file = "C:/Users/ifomenko/Desktop/prjct_logs/opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionManager.log";}
-        else {file = "C:/Users/ifomenko/Desktop/prjct_logs/opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionManager.log." + to_string(i);}
+        if(i == 0) {file = path + "opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionManager.log";}
+        else {file = path + "opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionManager.log." + to_string(i);}
         cout << file << endl;
         //read_log_file(file);
         time = pars_txt(file, name_tag, value_tag);
@@ -53,5 +63,6 @@ int main()
     //поиск звонков в файлах
     search_calls(time, number_slot);
     /*---------------------------------------------*/
+
     return 0;
 }
