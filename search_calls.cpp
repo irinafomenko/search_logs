@@ -4,7 +4,8 @@ using namespace std;
 
 string start_t;
 string end_t;
-string prev_slot = "0";//для проверки 
+string prev_slot = "0";//для проверки
+extern string path;
 
 void write_file(string slot, string file, ofstream &result_file)
 {
@@ -71,11 +72,11 @@ void open_slots(string number_slot)
     {
         if(i == 0)
         {
-            file = "C:/Users/ifomenko/Desktop/prjct_logs/opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionSlot-" + number_slot + ".log";
+            file = path + "opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionSlot-" + number_slot + ".log";
         }
         else
         {
-            file = "C:/Users/ifomenko/Desktop/prjct_logs/opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionSlot-" + number_slot + ".log.1";
+            file = path + "opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionSlot-" + number_slot + ".log.1";
         }
         //cout << file << endl;
         //search_slot(file);
@@ -97,11 +98,11 @@ void open_cxi_slots(string number_slot)
     {
         if(i == 0)
         {
-            file = "C:/Users/ifomenko/Desktop/prjct_logs/opt/Avaya/ExperiencePortal/MPP/logs/process/CXI/CCXML-SessionSlot-" + number_slot + ".log";
+            file = path + "opt/Avaya/ExperiencePortal/MPP/logs/process/CXI/CCXML-SessionSlot-" + number_slot + ".log";
         }
         else
         {
-            file = "C:/Users/ifomenko/Desktop/prjct_logs/opt/Avaya/ExperiencePortal/MPP/logs/process/CXI/CCXML-SessionSlot-" + number_slot + ".log.1";
+            file = path + "opt/Avaya/ExperiencePortal/MPP/logs/process/CXI/CCXML-SessionSlot-" + number_slot + ".log.1";
         }
         //cout << file << endl;
         //search_slot(file);
@@ -123,11 +124,11 @@ void open_vb_slots(string number_slot)
     {
         if(i == 0)
         {
-            file = "C:/Users/ifomenko/Desktop/prjct_logs/opt/Avaya/ExperiencePortal/MPP/logs/process/VB/SessionSlot-" + number_slot + ".log";
+            file = path + "opt/Avaya/ExperiencePortal/MPP/logs/process/VB/SessionSlot-" + number_slot + ".log";
         }
         else
         {
-            file = "C:/Users/ifomenko/Desktop/prjct_logs/opt/Avaya/ExperiencePortal/MPP/logs/process/VB/SessionSlot-" + number_slot + ".log.1";
+            file = path + "opt/Avaya/ExperiencePortal/MPP/logs/process/VB/SessionSlot-" + number_slot + ".log.1";
         }
         //cout << file << endl;
         //search_slot(file);
@@ -149,11 +150,11 @@ void open_end_point_mgr(string number_slot)
     {
         if(i == 0)
         {
-            file = "C:/Users/ifomenko/Desktop/prjct_logs/opt/Avaya/ExperiencePortal/MPP/logs/process/MediaMgr/EndPointMgr.log";
+            file = path + "opt/Avaya/ExperiencePortal/MPP/logs/process/MediaMgr/EndPointMgr.log";
         }
         else
         {
-            file = "C:/Users/ifomenko/Desktop/prjct_logs/opt/Avaya/ExperiencePortal/MPP/logs/process/MediaMgr/EndPointMgr.log." + to_string(i);
+            file = path + "opt/Avaya/ExperiencePortal/MPP/logs/process/MediaMgr/EndPointMgr.log." + to_string(i);
         }
         //cout << file << endl;
         //search_slot(file);
