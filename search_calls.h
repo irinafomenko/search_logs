@@ -7,8 +7,9 @@
 
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 
-int search_calls(std::string time, std::string number_sid);
+int search_calls(std::string time, std::string number_slot);
 void write_file(std::string slot);
 
 #endif //PROJECT_LOGS_SEARCH_CALLS_IN_SLOTS_H
