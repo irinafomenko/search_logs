@@ -15,5 +15,6 @@ void search_tag(std::string name_tag, std::string value_tag);
 void search_slot(std::string file);
 void write_result(std::string search_tags, std::string line);
 void search_time(std::string line, int pos_time);
+void search_call_id(std::string line);
 
 #endif //PROJECT_LOGS_PARS_TXT_H
