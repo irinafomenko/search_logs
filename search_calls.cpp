@@ -40,10 +40,11 @@ void write_file(string slot, string file, ofstream &result_file)
                     //поэтому если нужного времени нет, то проверяем следующиую строку
                     if(p2 < 0)
                     {
+                        string prev_str = slot_str;
                         getline(slot_file, slot_str);
                         p2 = slot_str.find(end_t);
                         if(p2 < 0) {break;}//если в следующей строке тоже нет, то выходим из цикла, если есть, то продолжаем писать
-                        result_file << slot_str << endl;
+                        result_file << prev_str << endl;
                     }
                     result_file << slot_str << endl;
                 }
