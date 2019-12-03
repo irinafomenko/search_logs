@@ -69,16 +69,19 @@ void search_tag(string name_tag, string value_tag)
     id_invite = false;//call_id invite не найден
 
     getline(theFile, log_str);
-    int p1, p2;//позиции вхождений подстрок для поиска
+    int pos_sub_str;//позиции вхождений подстрок для поиска
     int sub_start = INVITE;
     int sub_end = SIP;
     while(sub_start <= sub_end) //поиск тега по возможным значениям
     {
         sub_str = enum_to_str(sub_start);
-        p1 = log_str.find("<" + sub_str);
-        p2 = log_str.find("<^" + sub_str);
-
-        if(p1 >= 0 || p2 >= 0)//если одна из подстрок найдена, то записываем строку в переменную
+        if((pos_sub_str = log_str.find("<" + sub_str)) >= 0)//если одна из подстрок найдена, то записываем строку в переменную
+        {
+            search_tags += log_str;
+            //cout << search_tags << endl;
+            break;
+        }
+        else if((pos_sub_str = log_str.find("<^" + sub_str)) >= 0)//если одна из подстрок найдена, то записываем строку в переменную
         {
             search_tags += log_str;
             //cout << search_tags << endl;
@@ -87,7 +90,7 @@ void search_tag(string name_tag, string value_tag)
         sub_start++;
     }
 
-    if(p1 >= 0 || p2 >= 0)//если одна из подстрок найдена (если в предыдущем цикле ничего не найдено, ничего не происходило)
+    if(pos_sub_str >= 0)//если одна из подстрок найдена (если в предыдущем цикле ничего не найдено, ничего не происходило)
     {
         getline(theFile, log_str);
         search_tags += log_str;
