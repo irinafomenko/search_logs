@@ -47,15 +47,6 @@ int main(int argc, char *argv[])
     //в строке содержится имя машины-id-номер слота
     //15 позиция номера слота после первого знака "-"
     number_slot = number_slot.substr(number_slot.find('-') + 15);
-    /*
-    char *s = new char[number_slot.size() + 1];
-    strcpy(s, number_slot.c_str());
-    char *p = strtok(s,"-");
-    while (p != NULL)
-    {
-        number_slot = p;
-        p = strtok(NULL, "-");
-    }*/
 #ifdef DEBUG
     cout << number_slot << endl;
 #endif
