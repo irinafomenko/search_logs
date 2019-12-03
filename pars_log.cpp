@@ -1,7 +1,7 @@
 //
 // Created by ifomenko on 26.11.2019.
 //
-#include "pars_txt.h"
+#include "pars_log.h"
 
 using namespace std;
 
@@ -147,7 +147,7 @@ void search_slot(string file)
     }
 }
 
-void parsing_txt(string file, string name_tag, string value_tag)
+void open_log(string file, string name_tag, string value_tag)
 {
     cout << "Parsing..." << endl;
 
@@ -169,12 +169,12 @@ void parsing_txt(string file, string name_tag, string value_tag)
     //cout << call_id << endl;
 }
 
-string pars_txt(string file, string name_tag, string value_tag)
+string pars_log(string file, string name_tag, string value_tag)
 {
     string result_time = "";
     if(result_logs_file.is_open())
     {
-        parsing_txt(file, name_tag, value_tag);
+        open_log(file, name_tag, value_tag);
         //cout << endl << "start_time: " << time_start << endl;
         //cout << "end_time: " << time_end << endl;
         result_time = time_start + " " + time_end;

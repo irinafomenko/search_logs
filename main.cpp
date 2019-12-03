@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cstring>
-#include "pars_txt.h"
+#include "pars_log.h"
 #include "search_calls.h"
 
 using namespace std;
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
         else {file = path + "opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionManager.log." + to_string(i);}
         cout << file << endl;
         //read_log_file(file);
-        time = pars_txt(file, name_tag, value_tag);
+        time = pars_log(file, name_tag, value_tag);
         //if(!number_slot.empty()) {break;}
     }
     cout << "Start time and end time: ";

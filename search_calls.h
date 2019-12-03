@@ -10,7 +10,7 @@
 #include <iomanip>
 
 int search_calls(std::string time, std::string number_slot);
-void write_file(std::string slot);
+void write_file(std::string slot, std::string file, std::ofstream &result_file);
 void open_slots(std::string number_slot);
 void open_cxi_slots(std::string number_slot);
 void open_vb_slots(std::string number_slot);
