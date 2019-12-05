@@ -10,6 +10,7 @@ bool flag_not_found = false;
 //ofstream result_logs_file;
 string time_start;//начало времени
 string time_end;//конец времени
+int call_id_length;
 ifstream theFile;//файл логов
 extern ofstream result_logs_file;//результирующий файл из main.cpp
 extern string number_slot;//номер слота из main.cpp
@@ -30,7 +31,7 @@ void search_time(string line, int pos_time)
 void search_call_id(string line)
 {
     int pos_call_id = line.find("Call-ID: ");//поиск строки с call-id
-    if(pos_call_id >= 0) {call_id = line.substr(pos_call_id + 9, line.length() - pos_call_id - 10);}//line.length() - pos_call_id - 10 длина call-ID
+    if(pos_call_id >= 0) {call_id = line.substr(pos_call_id + 9, call_id_length);}//line.length() - pos_call_id - 10 длина call-ID
     //cout << call_id << endl;
 }
 
@@ -106,6 +107,9 @@ void search_tag(string name_tag, string value_tag)
             search_tags += log_str;
             pos_name = log_str.find(name_tag);
             pos_value = log_str.find(value_tag);
+            //поиск длины call_id, чтоб правильно его записать
+            int pos_call_id = log_str.find("Call-ID: ");//поиск строки с call-id
+            if(pos_call_id >= 0) {call_id_length = log_str.length() - pos_call_id - 10;}
         }
         //cout << log_str.substr(0, pos_name + name_tag.length()) << endl;
         if(pos_name >= 0 && pos_value >= 0) {write_result(search_tags, log_str);}//при совпадении имени тега и его значении записываем в файл
