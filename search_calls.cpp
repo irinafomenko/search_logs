@@ -30,8 +30,9 @@ void write_file(string slot, string file, ofstream &result_file)
                 while(p2 < 0)//записываем все, пока не найден конец времени
                 {
                     getline(slot_file, slot_str);
-                    result_file << slot_str << endl;
                     p2 = slot_str.find(end_t);
+                    if(p2 < 0 && (start_t == end_t)) {break;}//если начальное и конечное время равны и в строке нет end_t, то выходим...иначе, все записывает в файл
+                    result_file << slot_str << endl;
                 }
                 while(p2 >= 0)//запись строк до последнего равного времени (есть строки с одинаковым временем, что их тоже записать)
                 {
@@ -51,7 +52,7 @@ void write_file(string slot, string file, ofstream &result_file)
                 }
                 result_file << endl;
                 prev_slot = slot;
-                cout << "SessionSlot-" << prev_slot << endl;
+                //cout << "SessionSlot-" << prev_slot << endl;
                 flag_find = true;
             }
         }
@@ -87,6 +88,7 @@ void open_slots(string number_slot)
         write_file(number_slot, file, result_file);
         if(flag_find == true) {break;}
     }
+    if(flag_find == false) {cout << "Not found time in SessionSlot-" + number_slot + ".log" << endl;}
     result_file.close();
     prev_slot = "0";
 }
@@ -115,6 +117,7 @@ void open_cxi_slots(string number_slot)
         write_file(number_slot, file, result_file);
         if(flag_find == true) {break;}
     }
+    if(flag_find == false) {cout << "Not found time in CCXML-SessionSlot-" + number_slot + ".log" << endl;}
     result_file.close();
     prev_slot = "0";
 }
@@ -143,6 +146,7 @@ void open_vb_slots(string number_slot)
         write_file(number_slot, file, result_file);
         if(flag_find == true) {break;}
     }
+    if(flag_find == false) {cout << "Not found time in VB/SessionSlot-" + number_slot + ".log" << endl;}
     result_file.close();
     prev_slot = "0";
 }
@@ -171,6 +175,7 @@ void open_end_point_mgr(string number_slot)
         write_file(number_slot, file, result_file);
         if(flag_find == true) {break;}
     }
+    if(flag_find == false) {cout << "Not found time in MediaMgr/EndPointMgr.log" << endl;}
     result_file.close();
     prev_slot = "0";
 }
