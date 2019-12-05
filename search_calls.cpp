@@ -6,6 +6,7 @@ string start_t;
 string end_t;
 string prev_slot = "0";//для проверки
 extern string path;
+bool flag_find;
 
 void write_file(string slot, string file, ofstream &result_file)
 {
@@ -51,6 +52,7 @@ void write_file(string slot, string file, ofstream &result_file)
                 result_file << endl;
                 prev_slot = slot;
                 cout << "SessionSlot-" << prev_slot << endl;
+                flag_find = true;
             }
         }
         slot_file.close();
@@ -65,11 +67,12 @@ void open_slots(string number_slot)
 {
     ofstream result_file("SM_SessionSlot_result.txt",ios::out);
     string file;
+    flag_find = false;
     //заполнение ведущими нулями
     std::ostringstream add_zeros;
     add_zeros << setfill('0') << setw(3) << number_slot;
     number_slot = add_zeros.str();
-    for(int i=0; i<2; i++)
+    for(int i=0; i<5; i++)
     {
         if(i == 0)
         {
@@ -82,6 +85,7 @@ void open_slots(string number_slot)
         //cout << file << endl;
         //search_slot(file);
         write_file(number_slot, file, result_file);
+        if(flag_find == true) {break;}
     }
     result_file.close();
     prev_slot = "0";
@@ -91,11 +95,12 @@ void open_cxi_slots(string number_slot)
 {
     ofstream result_file("CXI_SessionSlot_result.txt",ios::out);
     string file;
+    flag_find = false;
     //заполнение ведущими нулями
     std::ostringstream add_zeros;
     add_zeros << setfill('0') << setw(3) << number_slot;
     number_slot = add_zeros.str();
-    for(int i=0; i<2; i++)
+    for(int i=0; i<5; i++)
     {
         if(i == 0)
         {
@@ -108,6 +113,7 @@ void open_cxi_slots(string number_slot)
         //cout << file << endl;
         //search_slot(file);
         write_file(number_slot, file, result_file);
+        if(flag_find == true) {break;}
     }
     result_file.close();
     prev_slot = "0";
@@ -117,11 +123,12 @@ void open_vb_slots(string number_slot)
 {
     ofstream result_file("VB_SessionSlot_result.txt",ios::out);
     string file;
+    flag_find = false;
     //заполнение ведущими нулями
     std::ostringstream add_zeros;
     add_zeros << setfill('0') << setw(3) << number_slot;
     number_slot = add_zeros.str();
-    for(int i=0; i<2; i++)
+    for(int i=0; i<5; i++)
     {
         if(i == 0)
         {
@@ -134,6 +141,7 @@ void open_vb_slots(string number_slot)
         //cout << file << endl;
         //search_slot(file);
         write_file(number_slot, file, result_file);
+        if(flag_find == true) {break;}
     }
     result_file.close();
     prev_slot = "0";
@@ -143,11 +151,12 @@ void open_end_point_mgr(string number_slot)
 {
     ofstream result_file("End_Point_Mgr_result.txt",ios::out);
     string file;
+    flag_find = false;
     //заполнение ведущими нулями
     std::ostringstream add_zeros;
     add_zeros << setfill('0') << setw(3) << number_slot;
     number_slot = add_zeros.str();
-    for(int i=0; i<4; i++)
+    for(int i=0; i<10; i++)
     {
         if(i == 0)
         {
@@ -160,6 +169,7 @@ void open_end_point_mgr(string number_slot)
         //cout << file << endl;
         //search_slot(file);
         write_file(number_slot, file, result_file);
+        if(flag_find == true) {break;}
     }
     result_file.close();
     prev_slot = "0";

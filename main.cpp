@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     cout << "Enter value tag: ";
     getline(cin, value_tag);
 
-    for(int i=0; i<5; i++)
+    for(int i=0; i<10; i++)
     {
         string file;
         if(i == 0) {file = path + "opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionManager.log";}
@@ -36,10 +36,13 @@ int main(int argc, char *argv[])
         cout << file << endl;
         //read_log_file(file);
         time = pars_log(file, name_tag, value_tag);
-        //if(!number_slot.empty()) {break;}
+        if(!number_slot.empty()) {break;}
     }
-    cout << "Start time and end time: ";
-    cout << time << endl;
+    if(!time.empty())
+    {
+        cout << "Start time and end time: ";
+        cout << time << endl;
+    }
     //cout << number_sid << endl;
     result_logs_file.close();
     /*---------------------------------------------*/
