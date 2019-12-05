@@ -36,9 +36,9 @@ int main(int argc, char *argv[])
         cout << file << endl;
         //read_log_file(file);
         time = pars_log(file, name_tag, value_tag);
-        if(!number_slot.empty()) {break;}
+        //if(!number_slot.empty()) {break;}
     }
-    if(!time.empty())
+    if(time != " ")
     {
         cout << "Start time and end time: ";
         cout << time << endl;
