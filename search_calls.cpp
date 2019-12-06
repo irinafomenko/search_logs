@@ -30,8 +30,9 @@ void write_file(string slot, string file, ofstream &result_file)
                 while(p2 < 0)//записываем все, пока не найден конец времени
                 {
                     getline(slot_file, slot_str);
+                    string time = slot_str.substr(12, 8);
                     p2 = slot_str.find(end_t);
-                    if(p2 < 0 && (start_t == end_t)) {break;}//если начальное и конечное время равны и в строке нет end_t, то выходим...иначе, все записывает в файл
+                    if((p2 < 0 && (start_t == end_t)) || (p2 < 0 && time > end_t)) {cout << slot_str << endl; break;}//если начальное и конечное время равны и в строке нет end_t, то выходим...иначе, все записывает в файл
                     result_file << slot_str << endl;
                 }
                 while(p2 >= 0)//запись строк до последнего равного времени (есть строки с одинаковым временем, что их тоже записать)
@@ -60,7 +61,7 @@ void write_file(string slot, string file, ofstream &result_file)
     }
     else
     {
-        cout << "Slot_file doesn't open!" << endl;
+        //cout << "Slot_file doesn't open!" << endl;
     }
 }
 
