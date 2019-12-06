@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     cout << "Enter value tag: ";
     getline(cin, value_tag);
 
-    for(int i=0; i<10; i++)
+    for(int i=9; i>=0; i--)
     {
         string file;
         if(i == 0) {file = path + "opt/Avaya/ExperiencePortal/MPP/logs/process/SessMgr/SessionManager.log";}
