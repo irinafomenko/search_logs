@@ -28,10 +28,41 @@ void search_time(string line, int pos_time)
     if(time > time_end) {time_end = time;}
 }
 
+void search_slot()//string file)
+{
+    theFile.seekg(0, ios::beg);
+    while(!theFile.eof())
+    {
+        string line;
+        getline(theFile, line);
+        int pos_sid = line.find("sipcid:");
+        int id = line.find(call_id);
+        int pos_cid;
+        if(id >= 0 && pos_sid >= 0)//если подстрока sipcid: и call_id инвайта найдено в одной строке, то ищем начало и конец строки с номером слота
+        {
+            //cout << line << endl;
+            pos_sid = line.find("sid:");//начало подстроки с номером слота
+            pos_cid = line.find("cid:");//конец подстроки с номером слота
+            if(pos_sid >= 0)//если начало найдено
+            {
+                number_slot = line.substr(pos_sid, pos_cid - pos_sid - 1);//записываем строку, -1 без пробела
+                //cout << line << endl;
+                result_logs_file << line << endl;//запись строки полностью в файл
+                break;
+            }
+        }
+    }
+}
+
 void search_call_id(string line)
 {
     int pos_call_id = line.find("Call-ID: ");//поиск строки с call-id
-    if(pos_call_id >= 0) {call_id = line.substr(pos_call_id + 9, call_id_length);}//line.length() - pos_call_id - 10 длина call-ID
+    if(pos_call_id >= 0)
+    {
+        call_id = line.substr(pos_call_id + 9, call_id_length);
+        //search_slot();
+        id_invite = false;
+    }
     //cout << call_id << endl;
 }
 
@@ -45,9 +76,9 @@ void write_result(string search_tags, string line)
     int pos_time = search_tags.find("@");
     if(pos_time >= 0) {search_time(search_tags, pos_time);}//поиск вермени звонка (начало и конец)
     //INVITE
-    int pos_invite = search_tags.find("INVITE");
+    int pos_invite = search_tags.find("INVITE ");
     if(pos_invite >= 0) {id_invite = true;}//если это INVITE, то ищем call-id звонка
-    if(id_invite == true && call_id.empty()) {search_call_id(search_tags);}//поиска call-id до найденной строки
+    if(id_invite == true) {search_call_id(search_tags);} //поиска call-id до найденной строки
 
     int pos_sign = line.find(">|");//поиск конца тега
     while(pos_sign < 0)// если не конец тега, то пишем все в файл
@@ -55,8 +86,15 @@ void write_result(string search_tags, string line)
         getline(theFile, line);
         //search_time(line);
         result_logs_file << line << endl;
-        if(id_invite == true && call_id.empty()) {search_call_id(line);}//поиск call-id после искомой строки
+        if(id_invite == true) {search_call_id(line);} //поиск call-id после искомой строки
         pos_sign = line.find(">|");
+    }
+    if(pos_invite >= 0)
+    {
+        //запомнить текущую позицию в файле
+        int pos_thefile = theFile.tellg();
+        search_slot();//поиск слота
+        theFile.seekg(pos_thefile, ios::beg);//переходим на текущую позицию файла
     }
 
     flag_not_found = true;
@@ -120,39 +158,7 @@ void search_tag(string name_tag, string value_tag)
 
 }
 
-void search_slot(string file)
-{
-    theFile.open(file, ios::in);
-    if(theFile.is_open())
-    {
-        //cout << call_id << endl;
-        while(!theFile.eof())
-        {
-            string line;
-            getline(theFile, line);
-            int pos_sid = line.find("sipcid:");
-            int id = line.find(call_id);
-            int pos_cid;
-            if(id >= 0 && pos_sid >= 0)//если подстрока sipcid: и call_id инвайта найдено в одной строке, то ищем начало и конец строки с номером слота
-            {
-                pos_sid = line.find("sid:");//начало подстроки с номером слота
-                pos_cid = line.find("cid:");//конец подстроки с номером слота
-                if(pos_sid >= 0)//если начало найдено
-                {
-                    number_slot = line.substr(pos_sid, pos_cid - pos_sid - 1);//записываем строку, -1 без пробела
-                    //cout << number_sid << endl;
-                    result_logs_file << line << endl;//запись строки полностью в файл
-                    break;
-                }
-            }
-        }
-        theFile.close();
-    }
-    else
-    {
-        cout << "Log file doesn't open!" << endl;
-    }
-}
+
 
 void open_log(string file, string name_tag, string value_tag)
 {
@@ -172,7 +178,7 @@ void open_log(string file, string name_tag, string value_tag)
     {
         cout << "Log file doesn't open!" << endl;
     }
-    if(call_id != "") {search_slot(file);}//если call-id найдено, ищем номер слота
+    //if(call_id != "") {search_slot(file);}//если call-id найдено, ищем номер слота
     //cout << call_id << endl;
 }
 
